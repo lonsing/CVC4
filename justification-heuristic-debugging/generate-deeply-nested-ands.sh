@@ -40,6 +40,10 @@ do
     NEXTINDEX=`echo "scale=2; $CURINDEX + 1" | bc`	
 #    echo "(define-fun and$CURINDEX () Bool (and and$PREVINDEX x$NEXTINDEX) )"
 
+    TOGGLE=`echo "scale=0; $CURINDEX % 2" | bc`
+
+echo "toggle $TOGGLE"
+    
     echo "(define-fun and$CURINDEX () Bool (and and$PREVINDEX (P x$NEXTINDEX)))"
 done
 

@@ -24,10 +24,10 @@ do
     echo "(declare-const x$CURINDEX Int)"
 done
 
-$echo "(define-fun P ((x Int)) Bool (>= x 0))"
+#echo "(define-fun P ((x Int)) Bool (>= x 0))"
 echo "(define-fun P ((x Int) (y Int)) Bool (>= x y))"
 
-echo "(define-fun and0 () Bool (and (P x0 x1) (P x1 x2)))"
+echo "(define-fun or0 () Bool (or (P x0 x1) (P x1 x2)))"
 
 #echo "(and (P(x0)) (P(x1)))"
 
@@ -43,7 +43,19 @@ do
     NEXTINDEX2=`echo "scale=2; $CURINDEX + 2" | bc`	
 #    echo "(define-fun and$CURINDEX () Bool (and and$PREVINDEX x$NEXTINDEX) )"
 
-    echo "(define-fun and$CURINDEX () Bool (and and$PREVINDEX (P x$NEXTINDEX1 x$NEXTINDEX2)))"
+    TOGGLE=`echo "scale=0; $CURINDEX % 2" | bc`
+    #echo "toggle $TOGGLE"
+    if (($TOGGLE))
+    then
+	echo "(define-fun and$CURINDEX () Bool (and or$PREVINDEX (P x$NEXTINDEX1 x$NEXTINDEX2)))"
+    else
+	echo "(define-fun or$CURINDEX () Bool (or and$PREVINDEX (P x$NEXTINDEX1 x$NEXTINDEX2)))"
+    fi
+
+
+
+
+
 done
 
 CURINDEX=`echo "scale=2; $CURINDEX - 1" | bc`	
